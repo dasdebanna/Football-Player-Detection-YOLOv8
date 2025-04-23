@@ -1,86 +1,130 @@
 # Football Player Detection using YOLOv8
 
-This project aims to detect football players in video footage using the YOLOv8 (You Only Look Once version 8) model. YOLOv8 is a state-of-the-art, real-time object detection system. This repository includes a Jupyter Notebook for model implementation and an example output video demonstrating the detection.
+![Football Player Detection](https://img.shields.io/badge/Computer%20Vision-Object%20Detection-blue)
+![YOLOv8](https://img.shields.io/badge/Model-YOLOv8-brightgreen)
+![PyTorch](https://img.shields.io/badge/Framework-PyTorch-orange)
 
-## Table of Contents
+## 📋 Overview
 
-- [Project Overview](#project-overview)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Model Details](#model-details)
-- [Results](#results)
-- [Contributing](#contributing)
-- [License](#license)
+This project demonstrates how to detect football players in video footage using YOLOv8, a state-of-the-art real-time object detection model. The implementation leverages the Ultralytics YOLOv8 framework to identify and track players on the field.
 
-## Project Overview
+## 🎬 Demo
 
-This repository contains the code to detect football players in videos using the YOLOv8 object detection model. The YOLO model is known for its speed and accuracy, making it suitable for real-time applications like sports analytics.
+[![Football Player Detection Demo](https://img.youtube.com/vi/AXp5uXWnYQA/0.jpg)](https://youtu.be/AXp5uXWnYQA)
+*Click on the image above to watch the demo video*
 
-## Technologies Used
+## 🚀 Features
 
-- **YOLOv8**: An advanced version of the YOLO object detection algorithm.
-- **Python**: The main programming language used.
-- **Jupyter Notebook**: For interactive coding and visualization.
-- **OpenCV**: For video processing.
-- **Numpy**: For numerical operations.
-- **Pandas**: For data manipulation and analysis.
+- **Football Player Detection**: Accurately identifies football players in video streams
+- **Real-time Processing**: Optimized for efficient video processing
+- **Pre-trained Model**: Utilizes YOLOv8's pre-trained weights
+- **Easy Setup**: Simple implementation with minimal dependencies
+- **Visualization**: Creates annotated output video with bounding boxes around detected players
 
-## Installation
+## 🛠️ Installation
 
-To run this project locally, follow these steps:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/dasdebanna/Football-Player-Detection-YOLOv8.git
-    ```
-2. Change the directory:
-    ```bash
-    cd Football-Player-Detection-YOLOv8
-    ```
-3. Create a virtual environment:
-    ```bash
-    python -m venv venv
-    ```
-4. Activate the virtual environment:
-    - For Windows:
-        ```bash
-        .\venv\Scripts\activate
-        ```
-    - For macOS/Linux:
-        ```bash
-        source venv/bin/activate
-        ```
-5. Install the required packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Usage
-
-Open the `football-player-detection-yolov8.ipynb` Jupyter Notebook to see the implementation details and run the model. The notebook includes steps to:
-
-1. Load and preprocess the data.
-2. Initialize and load the YOLOv8 model.
-3. Perform player detection on sample videos.
-4. Visualize and save the output.
-
-To run the notebook, use the following command:
 ```bash
-jupyter notebook football-player-detection-yolov8.ipynb
+# Clone the repository
+git clone https://github.com/dasdebanna/Football-Player-Detection-YOLOv8.git
+cd Football-Player-Detection-YOLOv8
+
+# Create and activate a virtual environment (optional but recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+
+# Install required packages
+pip install ultralytics opencv-python
 ```
-## Model Details
-YOLOv8 (You Only Look Once version 8) is a real-time object detection model known for its speed and accuracy. It processes images in a single pass, making it efficient for tasks requiring real-time performance.
 
-Key Features of YOLOv8:
-Real-time processing: Capable of processing images at high frame rates.
-High accuracy: Improved object detection accuracy compared to previous versions.
-Versatility: Can be used for various object detection tasks.
-## Results
-The output video (output.mp4) in the repository demonstrates the player detection capabilities of the YOLOv8 model. The notebook provides a detailed walkthrough of the detection process and visualization of results.
+## 📊 Usage
 
-## Contributing
-Contributions are welcome! Please fork this repository and submit pull requests for any enhancements or bug fixes.
+The project is organized as a Jupyter notebook which can be run in environments like Google Colab, Jupyter Lab, or VSCode.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+1. Open the notebook `Football_Player_Detection_YOLOv8.ipynb`
+2. Install the required dependencies (if not already installed)
+3. Run the cells sequentially to:
+   - Import necessary libraries
+   - Download and load the YOLOv8 model
+   - Process the video for player detection
+   - Generate the output video with detections
+
+### Code Example
+
+```python
+# Import the required libraries
+from ultralytics import YOLO
+import cv2
+
+# Load the YOLOv8 model
+model = YOLO('yolov8n.pt')
+
+# Open the video file
+video_path = "football.mp4"
+cap = cv2.VideoCapture(video_path)
+
+# Process the video frames
+while cap.isOpened():
+    success, frame = cap.read()
+    if success:
+        # Run YOLOv8 inference on the frame
+        results = model(frame)
+        
+        # Visualize the results on the frame
+        annotated_frame = results[0].plot()
+        
+        # Display the annotated frame
+        cv2.imshow("YOLOv8 Inference", annotated_frame)
+        
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+    else:
+        # Break the loop if the end of the video is reached
+        break
+
+# Release the video capture object and close the display window
+cap.release()
+cv2.destroyAllWindows()
+```
+
+## 📝 Methodology
+
+1. **Model Selection**: The project uses YOLOv8n, a lightweight version of YOLOv8 that offers a good balance between speed and accuracy.
+2. **Preprocessing**: Video frames are extracted and processed for detection.
+3. **Detection**: The YOLOv8 model identifies objects in each frame, focusing on the "person" class.
+4. **Post-processing**: Bounding boxes are drawn around detected players and the processed frames are compiled into an output video.
+
+## 📊 Results
+
+The model successfully detects football players in the video footage. Detection performance depends on factors such as:
+- Lighting conditions
+- Camera angle and distance
+- Player occlusion
+- Video resolution
+
+## 🔮 Future Improvements
+
+- Implement player tracking to maintain player identity across frames
+- Add team classification to distinguish between teams
+- Include player pose estimation for action recognition
+- Optimize for real-time processing on edge devices
+- Add player jersey number recognition
+
+## 📚 References
+
+- [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
+- [YOLOv8 GitHub Repository](https://github.com/ultralytics/ultralytics)
+- [Object Detection with YOLOv8](https://learnopencv.com/ultralytics-yolov8/)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👏 Acknowledgements
+
+- [Ultralytics](https://ultralytics.com/) for developing the YOLOv8 model
+- Open-source computer vision community
+
+---
+
+Developed with ❤️ by [dasdebanna](https://github.com/dasdebanna)
